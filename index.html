@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Pegawai</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: black;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color:bisque;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: black;
+            margin-bottom: 30px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        thead th {
+            background-color: orange;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        
+        tbody td {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+        
+        tfoot td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            background-color: #e8f5e8;
+            font-weight: bold;
+        }
+        
+        .currency {
+            text-align: right;
+        }
+        
+        .label {
+            font-weight: bold;
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Data Pegawai</h1>
+        <table id="employeeTable">
+            <thead>
+                <tr>
+                    <th>Keterangan</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody id="employeeData">
+                <!-- Data akan diisi oleh JavaScript -->
+            </tbody>
+            <tfoot id="totalSection">
+                <!-- Total gaji akan diisi oleh JavaScript -->
+            </tfoot>
+        </table>
+    </div>
+
+    <script>
+        // Data pegawai
+        const pegawai = {
+            nama: "Dodi Prayodi",
+            umur: 25,
+            jabatan: "Manajer",
+            status: "Menikah"
+        };
+
+        // Fungsi untuk menentukan gaji pokok berdasarkan jabatan
+        function getGajiPokok(jabatan) {
+            if (jabatan.toLowerCase() === "manajer") {
+                return 15000000;
+            } else if (jabatan.toLowerCase() === "asisten manajer") {
+                return 10000000;
+            } else if (jabatan.toLowerCase() === "staff") {
+                return 5000000;
+            } else {
+                return 0;
+            }
+        }
+
+        // Fungsi untuk format currency
+        function formatCurrency(amount) {
+            return "Rp " + amount.toLocaleString('id-ID');
+        }
+
+        // Hitung gaji dan tunjangan
+        const gajiPokok = getGajiPokok(pegawai.jabatan);
+        const tunjanganJabatan = gajiPokok * 0.15; // 15% dari gaji pokok
+        const bpjs = gajiPokok * 0.10; // 10% dari gaji pokok
+        
+        // Tunjangan keluarga menggunakan ternary operator
+        const tunjanganKeluarga = pegawai.status.toLowerCase() === "menikah" ? gajiPokok * 0.20 : 0;
+        
+        // Total gaji
+        const totalGaji = gajiPokok + tunjanganJabatan + bpjs + tunjanganKeluarga;
+
+        // Mengisi data ke tabel
+        const tbody = document.getElementById('employeeData');
+        const tfoot = document.getElementById('totalSection');
+
+        // Data pegawai
+        tbody.innerHTML = `
+            <tr>
+                <td class="label">Nama Pegawai</td>
+                <td>${pegawai.nama}</td>
+            </tr>
+            <tr>
+                <td class="label">Umur</td>
+                <td>${pegawai.umur} tahun</td>
+            </tr>
+            <tr>
+                <td class="label">Jabatan</td>
+                <td>${pegawai.jabatan}</td>
+            </tr>
+            <tr>
+                <td class="label">Status</td>
+                <td>${pegawai.status}</td>
+            </tr>
+            <tr>
+                <td class="label">Gaji Pokok</td>
+                <td class="currency">${formatCurrency(gajiPokok)}</td>
+            </tr>
+            <tr>
+                <td class="label">Tunjangan Jabatan (15%)</td>
+                <td class="currency">${formatCurrency(tunjanganJabatan)}</td>
+            </tr>
+            <tr>
+                <td class="label">BPJS (10%)</td>
+                <td class="currency">${formatCurrency(bpjs)}</td>
+            </tr>
+            <tr>
+                <td class="label">Tunjangan Keluarga (20%)</td>
+                <td class="currency">${formatCurrency(tunjanganKeluarga)}</td>
+            </tr>
+        `;
+
+        // Total gaji di tfoot
+        tfoot.innerHTML = `
+            <tr>
+                <td class="label">TOTAL GAJI</td>
+                <td class="currency">${formatCurrency(totalGaji)}</td>
+            </tr>
+        `;
+
+        // Log ke console untuk verifikasi
+        console.log("=== DATA PEGAWAI ===");
+        console.log(`Nama: ${pegawai.nama}`);
+        console.log(`Umur: ${pegawai.umur} tahun`);
+        console.log(`Jabatan: ${pegawai.jabatan}`);
+        console.log(`Status: ${pegawai.status}`);
+        console.log(`Gaji Pokok: ${formatCurrency(gajiPokok)}`);
+        console.log(`Tunjangan Jabatan: ${formatCurrency(tunjanganJabatan)}`);
+        console.log(`BPJS: ${formatCurrency(bpjs)}`);
+        console.log(`Tunjangan Keluarga: ${formatCurrency(tunjanganKeluarga)}`);
+        console.log(`TOTAL GAJI: ${formatCurrency(totalGaji)}`);
+    </script>
+</body>
+</html>
